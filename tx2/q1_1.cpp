@@ -27,7 +27,7 @@ node create()
     getline(cin, s.ten);
     cout << "Nhap gioi tinh: ";
     getline(cin, s.gioiTinh);
-    cout << "Nhap diem tk: ";
+    cout << "Nhap diem tk: ";   
     cin >> s.diemTK;
     cin.ignore();
 
@@ -122,20 +122,19 @@ void insert(node &L)
     node tmp = create();
 
     node cur = L;
-    for(int i = 0; i < 1; i++)
+    for (int i = 0; i < 1; i++)
     {
         cur = cur->next;
     }
     tmp->next = cur->next;
     cur->next = tmp;
 
-  
     cout << "Da chen sinh vien vao vi tri thu 3.\n";
     cout << "Danh sach sau khi chen: \n";
     display(L);
 }
 
-//chèn vào đầu
+// chèn vào đầu
 void insertFirst(node &L)
 {
     cout << "Nhap tt sinh vien can chen: ";
@@ -148,7 +147,7 @@ void insertFirst(node &L)
     display(L);
 }
 
-//chèn vào cuối
+// chèn vào cuối
 void insertLast(node &L)
 {
     cout << "Nhap tt sinh vien can chen: ";
@@ -189,7 +188,6 @@ int main()
     find(L, ten);
 
     insert(L);
-
 
     return 0;
 }

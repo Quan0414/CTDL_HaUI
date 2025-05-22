@@ -1,181 +1,168 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct nhanVien
+struct sinhVien
 {
     string hoDem;
     string ten;
-    string gioi_tinh;
-    string maNV;
-    float heSoLuong;
+    string gioiTinh;
+    float diemTK;
 };
 
-struct node
+struct Node
 {
-    /* data */
-    nhanVien nv;
-    node *next;
+    sinhVien sv;
+    Node *next;
 };
 
-typedef struct node *nv;
+typedef Node *node;
 
-nv create()
+node create()
 {
-    nhanVien e;
+    sinhVien s;
     cout << "Nhap ho dem: ";
-    getline(cin, e.hoDem);
+    getline(cin, s.hoDem);
     cout << "Nhap ten: ";
-    getline(cin, e.ten);
+    getline(cin, s.ten);
     cout << "Nhap gioi tinh: ";
-    getline(cin, e.gioi_tinh);
-    cout << "Nhap ma nhan vien: ";
-    getline(cin, e.maNV);
-    cout << "Nhap he so luong: ";
-    cin >> e.heSoLuong;
+    getline(cin, s.gioiTinh);
+    cout << "Nhap diem tk: ";
+    cin >> s.diemTK;
     cin.ignore();
 
-    nv tmp = new node();
-    tmp->nv = e;
-    tmp->next = nullptr;
+    node tmp = new Node();
+    tmp->sv = s;
+    tmp->next = NULL;
 
     return tmp;
 }
 
-void getInput(nv &L, int n)
+void getInput(node &L, int n)
 {
-    nv P = nullptr;
+    node P = NULL;
     for (int i = 0; i < n; i++)
     {
-        cout << "Nhap thong tin nhan vien thu " << i + 1 << ": " << endl;
-        nv newNV = create();
-        if (L == nullptr)
+        cout << "Nhap sinh vien thu " << i + 1 << ": \n";
+        node tmp = create();
+        if (L == NULL)
         {
-            L = newNV;
-            P = newNV;
+            L = tmp;
+            P = tmp;
         }
         else
         {
-            P->next = newNV;
-            P = newNV;
+            P->next = tmp;
+            P = tmp;
         }
     }
 }
 
-void displayList(nv L)
+void display(node L)
 {
-    cout << "Danh sach nhan vien:\n";
-    cout << left << setw(20) << "Ho dem" << setw(20) << "Ten"
-         << setw(20) << "Gioi tinh" << setw(20) << "Ma nhan vien"
-         << setw(20) << "He so luong" << endl;
-    nv cur = L;
-    while (cur != nullptr)
+    cout<<"Danh sach sinh vien: \n";
+    cout<<left<<setw(20)<<"Ho dem"<<setw(10)<<"Ten"<<setw(10)<<"Gioi tinh"<<setw(10)<<"Diem TK"<<endl;
+    node cur = L;
+    while(cur != NULL)
     {
-        /* code */
-        cout << left << setw(20) << cur->nv.hoDem << setw(20)
-             << cur->nv.ten << setw(20) << cur->nv.gioi_tinh << setw(20)
-             << cur->nv.maNV << setw(20) << cur->nv.heSoLuong << endl;
-
+        cout<<left<<setw(20)<<cur->sv.hoDem<<setw(10)<<cur->sv.ten<<setw(10)<<cur->sv.gioiTinh<<setw(10)<<cur->sv.diemTK<<endl;
         cur = cur->next;
     }
 }
 
-void find(nv L, string s)
+void find(node L, string s)
 {
-    // tim nhan vien theo ma nhan vien
-    nv cur = L;
-
-    while (cur != nullptr)
+    node cur = L;
+    while(cur != NULL)
     {
-        if (cur->nv.maNV == s)
-        {
-            cout << "Thong tin nhan vien can tim:\n";
-            cout << left << setw(20) << "Ho dem" << setw(20) << "Ten"
-                 << setw(20) << "Gioi tinh" << setw(20) << "Ma nhan vien"
-                 << setw(20) << "He so luong" << endl;
-            cout << left << setw(20) << cur->nv.hoDem << setw(20)
-                 << cur->nv.ten << setw(20) << cur->nv.gioi_tinh << setw(20)
-                 << cur->nv.maNV << setw(20) << cur->nv.heSoLuong << endl;
+        if(cur->sv.ten == s){
+            cout<<left<<setw(20)<<"Ho dem"<<setw(10)<<"Ten"<<setw(10)<<"Gioi tinh"<<setw(10)<<"Diem TK"<<endl;
+            cout<<left<<setw(20)<<cur->sv.hoDem<<setw(10)<<cur->sv.ten<<setw(10)<<cur->sv.gioiTinh<<setw(10)<<cur->sv.diemTK<<endl;
             return;
         }
         cur = cur->next;
     }
 }
 
-// xóa nhân viên đứng sau nhân viên vừa tìm thấy
-void delAfterFind(nv &L, string s)
+void delSV(node &L, string s)
 {
-    nv cur = L;
+    node cur = L;
+    node prev = NULL;
 
-    while (cur != nullptr)
+    while (cur != NULL)
     {
-        if (cur->nv.maNV == s)
+        if(cur->sv.ten == s)
         {
-            if (cur->next != nullptr)
+            if(prev == NULL)
             {
-                nv temp = cur->next;
-                cur->next = temp->next;
-                delete temp;
-
-                cout << "Danh sach sau khi xoa nhan vien:\n";
-                displayList(L);
+                L = cur->next;
             }
-            else
-            {
-                cout << "Khong co nhan vien nao sau nhan vien " << s << endl;
+            else{
+                prev->next = cur->next;
             }
+            delete cur;
+            cout<<"Xoa thanh cong\n";
+            display(L);
             return;
         }
+        prev = cur;
         cur = cur->next;
     }
 }
 
-// chèn nhân viên vào đầu danh sách
-void insertFirst(nv &L, nhanVien e)
+void insert(node &L)
 {
-    nv newNV = new node();
-    newNV->nv = e;
-    newNV->next = L;
-    L = newNV;
+    cout<<"Nhap tt sinh vien can chen: \n";
+    node tmp = create();
 
-    // hiển thị danh sách theo hệ số lương tăgn dần
-    cout << "Danh sach da duoc sap xep theo he so luong tang dan.\n";
-
-    for (nv i = L; i != nullptr; i = i->next)
+    node cur = L;
+    for (int i = 0; i < 1; i++)
     {
-        for (nv j = i->next; j != nullptr; j = j->next)
-        {
-            if (i->nv.heSoLuong > j->nv.heSoLuong)
-            {
-                swap(i->nv, j->nv);
-            }
-        }
+        cur = cur->next;
     }
-    displayList(L);
+
+    tmp->next = cur->next;
+    cur->next = tmp;
+
+    // sap xep danh sach theo diem tk
+    node p = L;
+    while (p != NULL)
+    {
+        node q = p->next;
+        while (q != NULL)
+        {
+            if (p->sv.diemTK > q->sv.diemTK)
+            {
+                sinhVien temp = p->sv;
+                p->sv = q->sv;
+                q->sv = temp;
+            }
+            q = q->next;
+        }
+        p = p->next;
+    }
+    cout<<"Danh sach sau khi chen va sap xep: \n";
+    display(L);
+
 }
 
 int main()
 {
-    nv L = nullptr;
+    node L = NULL;
     int n;
-    cout << "Nhap so luong nhan vien: ";
-    cin >> n;
+    cout<<"Nhap so luong sinh vien: ";
+    cin>>n;
     cin.ignore();
-
     getInput(L, n);
-    displayList(L);
+    display(L);
 
     string s;
-    cout << "Nhap ma nhan vien can tim: ";
-    cin >> s;
-
+    cout<<"Nhap ten sinh vien can tim: ";
+    getline(cin, s);
     find(L, s);
+    delSV(L, s);
 
-    delAfterFind(L, s);
-
-    cout << "Nhap thong tin nhan vien can chen vao dau danh sach:\n";
-    cin.ignore();
-    nv tmp = create();
-    insertFirst(L, tmp->nv);
+    insert(L);
 
     return 0;
 }
+
